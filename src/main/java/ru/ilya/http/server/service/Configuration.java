@@ -30,7 +30,7 @@ public class Configuration {
         }
         if (port < 1 || port > 65535) {
             throw new IllegalArgumentException(
-                String.format("Значение порта %d недопустимо, используйте значение в диапазоне от 1 до 65535", port));
+                    String.format("Значение порта %d недопустимо, используйте значение в диапазоне от 1 до 65535", port));
         }
     }
 

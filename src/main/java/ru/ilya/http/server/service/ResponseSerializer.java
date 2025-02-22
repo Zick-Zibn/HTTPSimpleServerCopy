@@ -2,7 +2,6 @@ package ru.ilya.http.server.service;
 
 import ru.ilya.http.server.domain.Response;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseSerializer {
@@ -26,7 +25,7 @@ public class ResponseSerializer {
 
     private String strResponseCode(int responseCode) {
         String stringResponseCode;
-        switch (responseCode){
+        switch (responseCode) {
             case 200:
                 stringResponseCode = responseCode + " OK";
                 break;

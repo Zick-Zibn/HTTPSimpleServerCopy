@@ -7,10 +7,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 public class ClientSocketService {
 
@@ -37,8 +33,8 @@ public class ClientSocketService {
         int secondsTimeOut = 10;
         LocalTime timeEnd = LocalTime.now().plusSeconds(secondsTimeOut);
 
-        while (!input.ready()){
-            if (LocalTime.now().isAfter(timeEnd)){
+        while (!input.ready()) {
+            if (LocalTime.now().isAfter(timeEnd)) {
                 return request;
             }
         } // TODO implement here timeout
@@ -46,13 +42,10 @@ public class ClientSocketService {
         while (input.ready()) {
             textBuilder.append(input.readLine()).append("\r\n");
         }
-        if (!textBuilder.isEmpty()){
+        if (!textBuilder.isEmpty()) {
             request = requestParser.parse(textBuilder.toString());
         }
         return request;
-        /*
-        return requestParser.parse(textBuilder.toString());
-        */
     }
 
     public void writeResponse(Response response) {
