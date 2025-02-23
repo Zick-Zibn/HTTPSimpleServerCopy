@@ -25,8 +25,14 @@ public class Configuration {
                 .build()
                 .parse(args);
 
+        if (this.rootFolder == null) {
+            throw new IllegalArgumentException("Directory with files not specified");
+        }
         if (Files.notExists(Paths.get(this.rootFolder))) {
             throw new IllegalArgumentException("Каталог не существует");
+        }
+        if (this.port == null) {
+            this.port = 8080;
         }
         if (port < 1 || port > 65535) {
             throw new IllegalArgumentException(

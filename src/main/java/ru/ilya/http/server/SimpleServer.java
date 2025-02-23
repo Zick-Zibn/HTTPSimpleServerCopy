@@ -29,23 +29,19 @@ public class SimpleServer {
             System.out.printf("Server started at port %d%n", configuration.getPort());
 
             while (true) {
-                try {
-                    Socket socket = serverSocket.accept();
-
+                try (Socket socket = serverSocket.accept()) {
                     System.out.println("New connection accepted");
                     ClientSocketService clientSocketService = new ClientSocketService(
                             socket,
                             new RequestParser(),
                             new ResponseSerializer());
 
+                    clientSocketService.waitForRequest(10); // move timeout value to Configuration
                     Request request = clientSocketService.readRequest();
-                    if (request != null) {
-                        Path filePath = Paths.get(request.getFilename());
+                    Path filePath = Paths.get(request.getFilename());
 
-                        Response response = this.initResponse(filePath, fileService);
-                        clientSocketService.writeResponse(response);
-                        socket.close();
-                    }
+                    Response response = this.initResponse(filePath);
+                    clientSocketService.writeResponse(response);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -55,12 +51,10 @@ public class SimpleServer {
         }
     }
 
-    private Response initResponse(Path filePathRequest, FileService fileService) throws IOException {
-
+    private Response initResponse(Path filePathRequest) throws IOException {
         Path filePath;
         HashMap<String, String> header = new HashMap<>();
-        Response response;
-        int responseCode = 0;
+        int responseCode;
         String responseBody;
 
         if (fileService.isFileExists(filePathRequest)) {
@@ -69,21 +63,17 @@ public class SimpleServer {
             } else {
                 filePath = filePathRequest;
             }
-            responseCode = 200;
+            responseCode = 200; // TODO add constants for response codes
         } else {
-            filePath = Path.of(Configuration.FILE_NOT_FOUND_NAME);
-            responseCode = 404;
+            filePath = Path.of(Configuration.FILE_NOT_FOUND_NAME); // TODO here read the file from application resources
+            responseCode = 404; // TODO add constants for response codes
         }
-        header.put("Content-Type:", " text/html; charset=utf-8");
+        // TODO handle other media type. For example for pictures (jpeg, bmp, ico, etc...)
+        header.put("Content-Type:", " text/html; charset=utf-8"); // TODO handle space in response serialization
         try (InputStream inputStream = fileService.readFile(filePath)) {
             responseBody = new String(inputStream.readAllBytes());
         }
-        response = new Response(responseCode, header, responseBody);
-
-        return response;
-        // TODO complete request handling
-        // TODO Response response = new Response(200, )
+        // TODO implement Builder pattern for Response
+        return new Response(responseCode, header, responseBody);
     }
 }
-
-

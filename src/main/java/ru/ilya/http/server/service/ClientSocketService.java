@@ -27,18 +27,19 @@ public class ClientSocketService {
         this.responseSerializer = responseSerializer;
     }
 
+    public void waitForRequest(int secondsTimeOut) throws IOException {
+        LocalTime timeEnd = LocalTime.now().plusSeconds(secondsTimeOut);
+        while (!input.ready()) {
+            // TODO use now(Clock clock) and provide Clock instance through the constructor
+            if (LocalTime.now().isAfter(timeEnd)) {
+                throw new IllegalStateException("Timeout with waiting for the first request");
+            }
+        }
+    }
+
     public Request readRequest() throws IOException {
         Request request = null;
         StringBuilder textBuilder = new StringBuilder();
-        int secondsTimeOut = 10;
-        LocalTime timeEnd = LocalTime.now().plusSeconds(secondsTimeOut);
-
-        while (!input.ready()) {
-            if (LocalTime.now().isAfter(timeEnd)) {
-                return request;
-            }
-        } // TODO implement here timeout
-
         while (input.ready()) {
             textBuilder.append(input.readLine()).append("\r\n");
         }

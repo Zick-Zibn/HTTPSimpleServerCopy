@@ -9,33 +9,28 @@ public class ResponseSerializer {
     // TODO handle all fields from Response class
     public String serialize(Response response) {
         StringBuilder stringResponse = new StringBuilder();
-        // TODO implement HTTP response string creation based on response object from parameter
-        stringResponse.append("HTTP/1.1 ").append(this.strResponseCode(response.getResponseCode())).append("\r\n");
+        stringResponse
+                .append("HTTP/1.1 ")
+                .append(this.strResponseCode(response.getResponseCode()))
+                .append("\r\n");
 
         Map<String, String> mapHeaders = response.getHeaders();
         for (Map.Entry<String, String> pair : mapHeaders.entrySet()) {
-            String headerLine = pair.getKey() + pair.getValue() + "\r\n";
+            String headerLine = pair.getKey() + pair.getValue() + "\r\n"; // TODO add here space between key and value
             stringResponse.append(headerLine);
         }
-        stringResponse.append("\r\n");
-        stringResponse.append(response.getBody());
-
-        return stringResponse.toString();
+        return stringResponse
+                .append("\r\n")
+                .append(response.getBody())
+                .toString();
     }
 
     private String strResponseCode(int responseCode) {
-        String stringResponseCode;
-        switch (responseCode) {
-            case 200:
-                stringResponseCode = responseCode + " OK";
-                break;
-            case 404:
-                stringResponseCode = responseCode + " Not Found";
-                break;
-            default:
-                throw new IllegalArgumentException(String.format(
-                        "Пока код ответа %s не поддерживается, ожидайте в следующем релизе", responseCode));
-        }
-        return stringResponseCode;
+        return switch (responseCode) {
+            case 200 -> responseCode + " OK";
+            case 404 -> responseCode + " Not Found";
+            default -> throw new IllegalArgumentException(String.format(
+                    "Пока код ответа %s не поддерживается, ожидайте в следующем релизе", responseCode));
+        };
     }
 }

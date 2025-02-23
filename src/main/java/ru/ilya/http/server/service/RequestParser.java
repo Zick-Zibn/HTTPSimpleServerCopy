@@ -10,6 +10,10 @@ public class RequestParser {
 
     public Request parse(String rawRequest) {
         Request request = new Request();
+
+//        int endOfHeadersIndex = rawRequest.indexOf("\r\n\r\n");
+//        rawRequest.substring(endOfHeadersIndex);
+
         String[] headerBody = rawRequest.split("\r\n\r\n");
         List<String> stringHeaderList = headerBody[0].lines().toList();
         String firstLine = stringHeaderList.getFirst();

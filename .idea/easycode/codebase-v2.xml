@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/main/java/ru/ilya/http/server/domain/Request.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/domain/RequestType.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/domain/Response.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/service/ClientSocketService.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/service/Configuration.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/service/FileService.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/service/RequestParser.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/service/ResponseSerializer.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/ServerRunner.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/src/main/java/ru/ilya/http/server/SimpleServer.java;/Users/aleks/dev/shortcut/HTTPSimpleServerCopy/web/index.html" />
+  </component>
+</project>
