@@ -4,25 +4,30 @@ import java.util.Map;
 
 public class Response {
 
-    private int responseCode;
-
+    private HTTPResponseStatusCode responseCode;
     private Map<String, String> headers;
-
     private String body;
 
     public Response() {
     }
-    public Response(int responseCode, Map<String, String> headers, String body) {
+
+    public Response(HTTPResponseStatusCode responseCode, Map<String, String> headers, String body) {
         this.responseCode = responseCode;
         this.headers = headers;
         this.body = body;
     }
 
-    public int getResponseCode() {
+    public Response(ResponseBuilder builder) {
+        this.responseCode = builder.responseCode;
+        this.headers = builder.headers;
+        this.body = builder.body;
+    }
+
+    public HTTPResponseStatusCode getResponseCode() {
         return responseCode;
     }
 
-    public void setResponseCode(int responseCode) {
+    public void setResponseCode(HTTPResponseStatusCode responseCode) {
         this.responseCode = responseCode;
     }
 
@@ -40,5 +45,22 @@ public class Response {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public static class ResponseBuilder {
+
+        private HTTPResponseStatusCode responseCode;
+        private Map<String, String> headers;
+        private String body;
+
+        public ResponseBuilder(HTTPResponseStatusCode responseCode, Map<String, String> headers, String body) {
+            this.responseCode = responseCode;
+            this.headers = headers;
+            this.body = body;
+        }
+
+        public Response build() {
+            return new Response(this);
+        }
     }
 }

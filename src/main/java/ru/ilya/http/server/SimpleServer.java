@@ -1,5 +1,6 @@
 package ru.ilya.http.server;
 
+import ru.ilya.http.server.domain.HTTPResponseStatusCode;
 import ru.ilya.http.server.domain.Request;
 import ru.ilya.http.server.domain.Response;
 import ru.ilya.http.server.service.*;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -36,7 +39,7 @@ public class SimpleServer {
                             new RequestParser(),
                             new ResponseSerializer());
 
-                    clientSocketService.waitForRequest(10); // move timeout value to Configuration
+                    clientSocketService.waitForRequest(configuration.getTimeOut()); // move timeout value to Configuration //ok
                     Request request = clientSocketService.readRequest();
                     Path filePath = Paths.get(request.getFilename());
 
@@ -51,10 +54,10 @@ public class SimpleServer {
         }
     }
 
-    private Response initResponse(Path filePathRequest) throws IOException {
+    private Response initResponse(Path filePathRequest) throws IOException, URISyntaxException {
         Path filePath;
         HashMap<String, String> header = new HashMap<>();
-        int responseCode;
+        HTTPResponseStatusCode statusCode;
         String responseBody;
 
         if (fileService.isFileExists(filePathRequest)) {
@@ -63,17 +66,32 @@ public class SimpleServer {
             } else {
                 filePath = filePathRequest;
             }
-            responseCode = 200; // TODO add constants for response codes
+            statusCode = HTTPResponseStatusCode.RESPONSE_CODE_200; // TODO add constants for response codes // completed
         } else {
-            filePath = Path.of(Configuration.FILE_NOT_FOUND_NAME); // TODO here read the file from application resources
-            responseCode = 404; // TODO add constants for response codes
+            // TODO here read the file from application resources // completed
+            filePath = Path.of(Objects.requireNonNull(SimpleServer.class.getResource("/not_found.html")).toURI());
+            statusCode = HTTPResponseStatusCode.RESPONSE_CODE_404;
         }
         // TODO handle other media type. For example for pictures (jpeg, bmp, ico, etc...)
-        header.put("Content-Type:", " text/html; charset=utf-8"); // TODO handle space in response serialization
-        try (InputStream inputStream = fileService.readFile(filePath)) {
-            responseBody = new String(inputStream.readAllBytes());
+
+        StringBuilder mimeType = new StringBuilder();
+        mimeType.append(FileService.getMIMEType(filePath));
+
+        if (mimeType.toString().contains("text")) {
+            header.put("Content-Type:", String.format("%s; charset=%s", mimeType, StandardCharsets.UTF_8));
+        } else {
+            header.put("Accept-Ranges:", "bytes");
+            header.put("Content-Type:", mimeType.toString());
         }
-        // TODO implement Builder pattern for Response
-        return new Response(responseCode, header, responseBody);
+
+        try (InputStream inputStream = fileService.readFile(filePath)) {
+            byte[] readByte = inputStream.readAllBytes();
+            ;
+            responseBody = new String(readByte);
+            header.put("Content-Length:", String.valueOf(readByte.length));
+        }
+
+        // TODO implement Builder pattern for Response // completed
+        return new Response.ResponseBuilder(statusCode, header, responseBody).build();
     }
 }

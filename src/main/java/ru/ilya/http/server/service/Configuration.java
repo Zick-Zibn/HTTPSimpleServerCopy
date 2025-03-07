@@ -16,6 +16,9 @@ public class Configuration {
     @Parameter(names = {"-f", "--folder"}, description = "Каталог файлов")
     private String rootFolder;
 
+    @Parameter(names = {"-t", "--timeout"}, description = "Time out")
+    private int timeOut;
+
     public static final String FILE_NOT_FOUND_NAME = "notFound.txt";
     public static final String INDEX_FILE = "index.txt";
 
@@ -29,7 +32,7 @@ public class Configuration {
             throw new IllegalArgumentException("Directory with files not specified");
         }
         if (Files.notExists(Paths.get(this.rootFolder))) {
-            throw new IllegalArgumentException("Каталог не существует");
+            throw new IllegalArgumentException(String.format("The directory %s does not exist", this.rootFolder));
         }
         if (this.port == null) {
             this.port = 8080;
@@ -46,5 +49,9 @@ public class Configuration {
 
     public Path getRootFolder() {
         return Paths.get(rootFolder);
+    }
+
+    public int getTimeOut() {
+        return timeOut;
     }
 }

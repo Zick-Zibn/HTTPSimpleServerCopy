@@ -20,4 +20,16 @@ public class FileService {
     public InputStream readFile(Path fileName) throws IOException {
         return Files.newInputStream(Path.of(rootPath.resolve(fileName).toUri()));
     }
+
+    public static String getFileExtension(Path filePath) {
+        String fileName = filePath.toFile().getName();
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
+    }
+
+    public static String getMIMEType(Path filePath) throws IOException {
+
+        return Files.probeContentType(filePath);
+
+    }
 }

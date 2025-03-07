@@ -3,7 +3,10 @@ package ru.ilya.http.server.service;
 import ru.ilya.http.server.domain.Request;
 import ru.ilya.http.server.domain.Response;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
@@ -41,7 +44,8 @@ public class ClientSocketService {
         Request request = null;
         StringBuilder textBuilder = new StringBuilder();
         while (input.ready()) {
-            textBuilder.append(input.readLine()).append("\r\n");
+            textBuilder.append(input.readLine())
+                    .append("\r\n");
         }
         if (!textBuilder.isEmpty()) {
             request = requestParser.parse(textBuilder.toString());
@@ -51,7 +55,7 @@ public class ClientSocketService {
 
     public void writeResponse(Response response) {
         String rawResponse = responseSerializer.serialize(response);
-        output.print(rawResponse); // what about extra new line at the end. May be just print()
+        output.write(rawResponse);
         output.flush();
     }
 }

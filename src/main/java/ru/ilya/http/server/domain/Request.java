@@ -6,13 +6,9 @@ import java.util.Map;
 public class Request {
 
     private RequestType requestType;
-
     private String filename;
-
     private String httpVersion;
-
     private Map<String, String> headers = new HashMap<>();
-
     private String body;
 
     public Request() {
