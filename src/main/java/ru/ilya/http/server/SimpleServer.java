@@ -43,7 +43,7 @@ public class SimpleServer {
                     Request request = clientSocketService.readRequest();
                     Path filePath = Paths.get(request.getFilename());
 
-                    Response response = this.initResponse(filePath);
+                    Response<String> response = this.initResponse(filePath);
                     clientSocketService.writeResponse(response);
                 } catch (Exception e) {
                     System.out.println(e);
@@ -54,7 +54,7 @@ public class SimpleServer {
         }
     }
 
-    private Response initResponse(Path filePathRequest) throws IOException, URISyntaxException {
+    private Response<String> initResponse(Path filePathRequest) throws IOException, URISyntaxException {
         Path filePath;
         HashMap<String, String> header = new HashMap<>();
         HTTPResponseStatusCode statusCode;

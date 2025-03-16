@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ResponseSerializer {
 
-    public String serialize(Response response) {
+    public String serialize(Response<String> response) {
         StringBuilder stringResponse = new StringBuilder();
         Map<String, String> mapHeaders = response.getHeaders();
 
@@ -20,5 +20,9 @@ public class ResponseSerializer {
                 .append("\r\n")
                 .append(response.getBody())
                 .toString();
+    }
+
+    public byte[] serializeBinary(Response<byte[]> response) {
+        return null;
     }
 }
