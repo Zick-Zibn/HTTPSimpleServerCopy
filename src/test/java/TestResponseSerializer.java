@@ -23,7 +23,7 @@ public class TestResponseSerializer {
 
         //header.put("HTTP/1.1", httpResponseStatusCode.getName());
         header.put("Content-Type:", "text/html; charset=utf-8");
-        String body = new String(inputStream.readAllBytes());
+        byte[] body = inputStream.readAllBytes();
 
         Response response = new Response(httpResponseStatusCode, header, body);
 

@@ -21,4 +21,18 @@ public class ResponseSerializer {
                 .append(response.getBody())
                 .toString();
     }
+    public byte[] serializeHeader(Response response){
+        StringBuilder stringResponse = new StringBuilder();
+        Map<String, String> mapHeaders = response.getHeaders();
+
+        stringResponse.append(String.format("HTTP/1.1 %s \r\n", response.getResponseCode().getName()));
+
+        for (Map.Entry<String, String> pair : mapHeaders.entrySet()) {
+            String headerLine = String.format("%s %s\r\n",pair.getKey(), pair.getValue());
+            stringResponse.append(headerLine);
+        }
+        stringResponse.append("\r\n");
+
+        return stringResponse.toString().getBytes();
+    }
 }

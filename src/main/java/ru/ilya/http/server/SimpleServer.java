@@ -58,7 +58,7 @@ public class SimpleServer {
         Path filePath;
         HashMap<String, String> header = new HashMap<>();
         HTTPResponseStatusCode statusCode;
-        String responseBody;
+        byte[] responseBody;
 
         if (fileService.isFileExists(filePathRequest)) {
             if (filePathRequest.equals(Path.of(""))) {
@@ -85,10 +85,9 @@ public class SimpleServer {
         }
 
         try (InputStream inputStream = fileService.readFile(filePath)) {
-            byte[] readByte = inputStream.readAllBytes();
+            responseBody = inputStream.readAllBytes();
             ;
-            responseBody = new String(readByte);
-            header.put("Content-Length:", String.valueOf(readByte.length));
+            header.put("Content-Length:", String.valueOf(responseBody.length));
         }
 
         // TODO implement Builder pattern for Response // completed

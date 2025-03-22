@@ -3,10 +3,7 @@ package ru.ilya.http.server.service;
 import ru.ilya.http.server.domain.Request;
 import ru.ilya.http.server.domain.Response;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
@@ -16,7 +13,8 @@ public class ClientSocketService {
     private final RequestParser requestParser;
     private final ResponseSerializer responseSerializer;
     private final BufferedReader input;
-    private final PrintWriter output;
+    //private final PrintWriter output;
+    private final BufferedOutputStream output;
 
     public ClientSocketService(
             Socket socket,
@@ -25,7 +23,8 @@ public class ClientSocketService {
     ) throws IOException {
         this.input = new BufferedReader(new InputStreamReader(
                 socket.getInputStream(), StandardCharsets.UTF_8));
-        this.output = new PrintWriter(socket.getOutputStream());
+        //this.output = new PrintWriter(socket.getOutputStream());
+        this.output = new BufferedOutputStream(socket.getOutputStream());
         this.requestParser = requestParser;
         this.responseSerializer = responseSerializer;
     }
@@ -53,9 +52,9 @@ public class ClientSocketService {
         return request;
     }
 
-    public void writeResponse(Response response) {
-        String rawResponse = responseSerializer.serialize(response);
-        output.write(rawResponse);
+    public void writeResponse(Response response) throws IOException {
+        output.write(responseSerializer.serializeHeader(response));
+        output.write(response.getBody());
         output.flush();
     }
 }
